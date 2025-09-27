@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Плащане{% endblock %}
 
-</body>
-</html>
+{% block content %}
+    <h2>Завършване на поръчка</h2>
+
+    <form method="post">
+        <label for="name">Име и фамилия</label>
+        <input type="text" name="name" required>
+
+        <label for="address">Адрес за доставка</label>
+        <input type="text" name="address" required>
+
+        <label for="payment">Начин на плащане</label>
+        <select name="payment" required>
+            <option value="card">Кредитна/дебитна карта</option>
+            <option value="cash">Наложен платеж</option>
+        </select>
+
+        <button type="submit">Поръчай</button>
+    </form>
+{% endblock %}
