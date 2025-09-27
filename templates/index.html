@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Начало - Магазин за обувки{% endblock %}
 
-</body>
-</html>
+{% block content %}
+    <h2>Добре дошли!</h2>
+    <p>Разгледайте нашия каталог и открийте най-новите модели обувки.</p>
+    <a href="{{ url_for('catalog.catalog_list') }}">
+        <button>Виж каталога</button>
+    </a>
+{% endblock %}

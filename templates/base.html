@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{% block title %}Магазин за обувки{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <header>
+        <h1>Добре дошли в магазина за обувки!</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Начало</a>
+            <a href="{{ url_for('catalog.catalog_list') }}">Каталог</a>
+            <a href="{{ url_for('cart.view_cart') }}">Количка</a>
 
+            {% if session.get('username') %}
+                <span>Здравей, {{ session.get('username') }}</span>
+                {% if session.get('role') == 'admin' %}
+                    <a href="{{ url_for('admin.manage_shoes') }}">Админ</a>
+                {% endif %}
+                <a href="{{ url_for('auth.logout') }}">Излез от профила</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}">Вход</a>
+                <a href="{{ url_for('auth.register') }}">Регистрация</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, msg in messages %}
+                    <li><strong>{{ category|capitalize }}:</strong> {{ msg }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
 </body>
 </html>
