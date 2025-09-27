@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Нова поръчка{% endblock %}
+
+{% block content %}
+    <h2>Направи поръчка</h2>
+
+    <form method="post">
+        <label for="name">Име и фамилия</label>
+        <input type="text" name="name" required>
+
+        <label for="address">Адрес</label>
+        <input type="text" name="address" required>
+
+        <label for="email">Имейл</label>
+        <input type="email" name="email" required>
+
+        <label for="shoe_model">Модел обувка</label>
+        <input type="text" name="shoe_model" required>
+
+        <button type="submit">Изпрати поръчката</button>
+    </form>
+{% endblock %}
