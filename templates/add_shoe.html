@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Добавяне на обувка{% endblock %}
+
+{% block content %}
+    <h2>Добавяне на нова обувка</h2>
+
+    <form method="post">
+        <label for="name">Име</label>
+        <input type="text" name="name" required>
+
+        <label for="price">Цена</label>
+        <input type="number" step="0.01" name="price" required>
+
+        <button type="submit">Добави</button>
+    </form>
+{% endblock %}

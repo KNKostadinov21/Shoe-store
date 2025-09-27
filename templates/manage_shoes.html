@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Админ - Управление на обувки{% endblock %}
+
+{% block content %}
+    <h2>Управление на обувки</h2>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>ID</th>
+            <th>Име</th>
+            <th>Цена</th>
+            <th>Действия</th>
+        </tr>
+        {% for shoe in shoes %}
+        <tr>
+            <td>{{ shoe.id }}</td>
+            <td>{{ shoe.name }}</td>
+            <td>${{ shoe.price }}</td>
+            <td>
+                <a href="{{ url_for('admin.update_shoe', shoe_id=shoe.id) }}"><button>Редактирай</button></a>
+                <a href="{{ url_for('admin.delete_shoe', shoe_id=shoe.id) }}"><button>Изтрий</button></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{{ url_for('admin.add_shoe') }}"><button>Добави нова обувка</button></a>
+{% endblock %}
