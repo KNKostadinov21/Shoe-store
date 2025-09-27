@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Каталог{% endblock %}
 
-</body>
-</html>
+{% block content %}
+    <h2>Каталог</h2>
+
+    <form method="get" action="{{ url_for('catalog.catalog_list') }}">
+        <input type="text" name="q" placeholder="Търси по име..." value="{{ query }}">
+        <button type="submit">Търси</button>
+    </form>
+
+    <ul style="list-style: none; padding: 0;">
+        {% for shoe in shoes %}
+        <li style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <span><strong>{{ shoe.name }}</strong> – ${{ shoe.price }}</span>
+            <form method="post" action="{{ url_for('cart.add_to_cart', shoe_id=shoe.id) }}">
+                <button type="submit">Добави в количката</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="{{ url_for('order.create_order') }}">
+        <button>Направи поръчка</button>
+    </a>
+{% endblock %}
