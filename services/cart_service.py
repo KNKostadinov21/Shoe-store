@@ -5,14 +5,13 @@ def get_cart(session):
 
 def add_to_cart(session, shoe):
     cart = get_cart(session)
-    cart.append({"id": shoe["id"], "name": shoe["name"], "price": shoe["price"]})
+    cart.append(shoe.id)
     session.modified = True
 
 def remove_from_cart(session, shoe_id):
     cart = get_cart(session)
-    for i, item in enumerate(cart):
-        if item.get("id") == shoe_id:
-            cart.pop(i)
-            session.modified = True
-            return True
+    if shoe_id in cart:
+        cart.remove(shoe_id)
+        session.modified = True
+        return True
     return False

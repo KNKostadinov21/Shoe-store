@@ -11,8 +11,8 @@ def login():
 
         success, message, user = auth_service.login(username, password)
         if success:
-            session["username"] = user["username"]
-            session["role"] = user.get("role", "user")
+            session["username"] = user.username
+            session["role"] = user.role
             flash(message, "success")
             return redirect(url_for("index"))
         else:

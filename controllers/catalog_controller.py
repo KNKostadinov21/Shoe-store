@@ -9,6 +9,6 @@ def catalog_list():
     shoes = catalog_service.get_all_shoes()
 
     if query:
-        shoes = [s for s in shoes if query in s["name"].lower()]
+        shoes = [s for s in shoes if query in s.name.lower()]
 
     return render_template("catalog.html", shoes=shoes, query=query)
