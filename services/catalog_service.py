@@ -2,15 +2,39 @@ class Shoes:
     def __init__(self, id, name, price):
         self.id = id
         self.name = name
-        self.price = price
+        self.__price = price
+
+    def get_price(self):
+        return self.__price
+
+    def set_price(self, price):
+        if type(price) == int:
+            self.__price = price
+
+class SportsShoes(Shoes):
+    def __init__(self, id : int, name : str, price : float, category="sport"):
+        super().__init__(id, name, price)
+        self.category = category
+
+class OfficialShoes(Shoes):
+    def __init__(self, id : int, name : str, price : float, category="official"):
+        super().__init__(id, name, price)
+        self.category = category
+
+class EverydayShoes(Shoes):
+    def __init__(self, id : int, name : str, price : float, category="everyday"):
+        super().__init__(id, name, price)
+        self.category = category
 
 catalog = []
 
-shoe1 = Shoes(1, "Nike Air Zoom", 100)
-shoe2 = Shoes(2, "Adidas Ultraboost", 120)
-shoe3 = Shoes(3, "Puma RS-X", 200)
+shoe1 = SportsShoes(1, "Nike", 100)
+shoe2 = SportsShoes(2, "Fila", 120)
+shoe3 = SportsShoes(3, "Puma", 200)
+shoe4 = OfficialShoes(4, "Cafe Moda", 150)
+shoe5 = EverydayShoes(5, "Easy street", 80)
 
-catalog.extend([shoe1, shoe2, shoe3])
+catalog.extend([shoe1, shoe2, shoe3, shoe4, shoe5])
 
 def get_all_shoes():
     return list(catalog)
