@@ -4,12 +4,14 @@ class Shoes:
         self.name = name
         self.__price = price
 
-    def get_price(self):
+    @property
+    def price(self):
         return self.__price
 
-    def set_price(self, price):
-        if type(price) == int:
-            self.__price = price
+    @price.setter
+    def price(self, new_price):
+        if isinstance(new_price, (int, float)):
+            self.__price = float(new_price)
 
 class SportsShoes(Shoes):
     def __init__(self, id : int, name : str, price : float, category="sport"):
