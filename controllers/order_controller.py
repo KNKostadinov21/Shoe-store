@@ -16,8 +16,3 @@ def create_order():
         return redirect(url_for("index"))
 
     return render_template("create_order.html")
-
-@order_bp.route("/list")
-def list_orders():
-    orders = order_service.get_all_orders()
-    return render_template("list_orders.html", orders=orders)

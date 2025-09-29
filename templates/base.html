@@ -4,6 +4,38 @@
     <meta charset="UTF-8">
     <title>{% block title %}Магазин за обувки{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .notification-bell {
+            position: relative;
+            display: inline-block;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        nav a, nav span {
+            color: white;
+            text-decoration: none;
+            margin: 0 6px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -12,6 +44,13 @@
             <a href="{{ url_for('index') }}">Начало</a>
             <a href="{{ url_for('catalog.catalog_list') }}">Каталог</a>
             <a href="{{ url_for('cart.view_cart') }}">Количка</a>
+
+            <div class="notification-bell">
+                <a href="{{ url_for('notifications.view_notifications') }}">🔔</a>
+                {% if notification_count > 0 %}
+                    <span class="notification-count">{{ notification_count }}</span>
+                {% endif %}
+            </div>
 
             {% if session.get('username') %}
                 <span>Здравей, {{ session.get('username') }}</span>

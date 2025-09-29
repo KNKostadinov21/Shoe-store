@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Нотификации{% endblock %}
+
+{% block content %}
+<h2>Вашите нотификации</h2>
+
+{% if notifications %}
+    <ul>
+    {% for note in notifications %}
+        <li>{{ note }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Нямате нови нотификации.</p>
+{% endif %}
+
+<a href="{{ url_for('catalog.catalog_list') }}">Отиди в каталога</a>
+{% endblock %}

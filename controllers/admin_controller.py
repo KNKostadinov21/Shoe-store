@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 import services.catalog_service as catalog_service
+import services.notification_service as notification_service
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -13,8 +14,11 @@ def add_shoe():
     if request.method == "POST":
         name = request.form["name"]
         price = float(request.form["price"])
-        catalog_service.add_shoe(name, price)
+        new_shoe = catalog_service.add_shoe(name, price)
         flash("Обувката е добавена!", "success")
+
+        notification_service.add_notification(f"Добавен е нов модел обувки: {new_shoe.name}")
+
         return redirect(url_for("admin.manage_shoes"))
     return render_template("add_shoe.html")
 
