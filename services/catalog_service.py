@@ -47,9 +47,16 @@ def get_shoe_by_id(shoe_id):
             return shoe
     return None
 
-def add_shoe(name, price):
+def add_shoe(name, price, category):
     new_id = max((shoe.id for shoe in catalog), default=0) + 1
-    new_shoe = Shoes(new_id, name, price)
+
+    new_shoe = []
+    if category == "sport":
+        new_shoe = SportsShoes(new_id, name, price)
+    elif category == "official":
+        new_shoe = OfficialShoes(new_id, name, price)
+    elif category == "everyday":
+        new_shoe = EverydayShoes(new_id, name, price)
     catalog.append(new_shoe)
     return new_shoe
 

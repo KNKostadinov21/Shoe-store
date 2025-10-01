@@ -13,7 +13,8 @@ def add_shoe():
     if request.method == "POST":
         name = request.form["name"]
         price = float(request.form["price"])
-        new_shoe = catalog_service.add_shoe(name, price)
+        category = request.form["category"]
+        new_shoe = catalog_service.add_shoe(name, price, category)
         flash("Обувката е добавена!", "success")
 
         return redirect(url_for("admin.manage_shoes"))
