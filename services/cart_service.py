@@ -3,10 +3,12 @@ def get_cart(session):
         session["cart"] = []
     return session["cart"]
 
+
 def add_to_cart(session, shoe):
     cart = get_cart(session)
     cart.append(shoe.id)
     session.modified = True
+
 
 def remove_from_cart(session, shoe_id):
     cart = get_cart(session)

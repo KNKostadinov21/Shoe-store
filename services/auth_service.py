@@ -1,34 +1,28 @@
-class User:
-    def __init__(self, username, email, password, role):
-        self.username = username
-        self.email = email
-        self.password = password
-        self.role = role
+from werkzeug.security import generate_password_hash, check_password_hash
+from models import db, User
 
-users = []
 
-admin = User("admin", "admin@admin.com", "admin123", "admin")
-user1 = User("user1", "user1@user.com", "user1", "user")
-user2 = User("user2", "user2@user.com", "user2", "user")
+def register_user(username, email, password, role="user"):
+    existing_user = User.query.filter(
+        (User.username == username) | (User.email == email)
+    ).first()
 
-users.append(admin)
-users.append(user1)
-users.append(user2)
+    if existing_user:
+        return False, "Потребител с това име или имейл вече съществува."
 
-def register_user(username, email, password):
-    if any(u.username == username for u in users):
-        return False, "Потребителското име вече съществува."
+    hashed_password = generate_password_hash(password)
+    new_user = User(username=username, email=email, password=hashed_password, role=role)
+    db.session.add(new_user)
+    db.session.commit()
+    return True, "Регистрацията е успешна!"
 
-    new_user = User(username, email, password, "user")
-
-    users.append(new_user)
-    return True, "Успешна регистрация!"
 
 def login(username, password):
-    user = next((u for u in users if u.username == username and u.password == password), None)
-    if user:
+    user = User.query.filter_by(username=username).first()
+    if user and check_password_hash(user.password, password):
         return True, "Успешен вход!", user
     return False, "Грешно потребителско име или парола.", None
 
+
 def get_all_users():
-    return users
+    return User.query.all()

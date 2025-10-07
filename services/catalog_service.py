@@ -1,75 +1,42 @@
-class Shoes:
-    def __init__(self, id, name, price):
-        self.id = id
-        self.name = name
-        self.__price = price
+from models import db, Shoe, SportsShoes, OfficialShoes, EverydayShoes
 
-    @property
-    def price(self):
-        return self.__price
-
-    @price.setter
-    def price(self, new_price):
-        if isinstance(new_price, (int, float)):
-            self.__price = float(new_price)
-
-class SportsShoes(Shoes):
-    def __init__(self, id : int, name : str, price : float, category="sport"):
-        super().__init__(id, name, price)
-        self.category = category
-
-class OfficialShoes(Shoes):
-    def __init__(self, id : int, name : str, price : float, category="official"):
-        super().__init__(id, name, price)
-        self.category = category
-
-class EverydayShoes(Shoes):
-    def __init__(self, id : int, name : str, price : float, category="everyday"):
-        super().__init__(id, name, price)
-        self.category = category
-
-catalog = []
-
-shoe1 = SportsShoes(1, "Nike", 100)
-shoe2 = SportsShoes(2, "Fila", 120)
-shoe3 = SportsShoes(3, "Puma", 200)
-shoe4 = OfficialShoes(4, "Cafe Moda", 150)
-shoe5 = EverydayShoes(5, "Easy street", 80)
-
-catalog.extend([shoe1, shoe2, shoe3, shoe4, shoe5])
 
 def get_all_shoes():
-    return list(catalog)
+    return Shoe.query.all()
+
 
 def get_shoe_by_id(shoe_id):
-    for shoe in catalog:
-        if shoe.id == shoe_id:
-            return shoe
-    return None
+    return Shoe.query.get(shoe_id)
+
 
 def add_shoe(name, price, category):
-    new_id = max((shoe.id for shoe in catalog), default=0) + 1
-
-    new_shoe = []
     if category == "sport":
-        new_shoe = SportsShoes(new_id, name, price)
+        new_shoe = SportsShoes(name=name, price=price)
     elif category == "official":
-        new_shoe = OfficialShoes(new_id, name, price)
+        new_shoe = OfficialShoes(name=name, price=price)
     elif category == "everyday":
-        new_shoe = EverydayShoes(new_id, name, price)
-    catalog.append(new_shoe)
+        new_shoe = EverydayShoes(name=name, price=price)
+    else:
+        new_shoe = Shoe(name=name, price=price, category=category)
+
+    db.session.add(new_shoe)
+    db.session.commit()
     return new_shoe
+
 
 def delete_shoe(shoe_id):
     shoe = get_shoe_by_id(shoe_id)
     if shoe:
-        catalog.remove(shoe)
+        db.session.delete(shoe)
+        db.session.commit()
         return True
     return False
+
 
 def update_shoe_price(shoe_id, new_price):
     shoe = get_shoe_by_id(shoe_id)
     if shoe:
         shoe.price = new_price
+        db.session.commit()
         return True
     return False
