@@ -7,14 +7,14 @@ from controllers.catalog_controller import catalog_bp
 from controllers.cart_controller import cart_bp
 from controllers.admin_controller import admin_bp
 from controllers.order_controller import order_bp
-
+import pymysql
 from models import db, User, Shoe, SportsShoes, OfficialShoes, EverydayShoes, Order
 
 
 app = Flask(__name__)
 app.secret_key = "supersecret"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///shoe_store.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://flaskuser:mypassword@localhost/shoe_store"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
