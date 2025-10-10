@@ -26,3 +26,14 @@ def login(username, password):
 
 def get_all_users():
     return User.query.all()
+
+
+def change_password(username, new_password):
+    user = User.query.filter_by(username=username).first()
+
+    if not user:
+        return False
+
+    user.password = generate_password_hash(new_password)
+    db.session.commit()
+    return True

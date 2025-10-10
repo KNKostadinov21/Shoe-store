@@ -43,3 +43,16 @@ def logout():
     session.pop("cart", None)
     flash("Излязохте от профила.", "info")
     return redirect(url_for("index"))
+
+@auth_bp.route("/profile", methods=["GET", "POST"])
+def profile():
+    if request.method == "POST":
+        new_password = request.form["new_password"]
+        username = session["username"]
+        success = auth_service.change_password(username, new_password)
+
+        if success:
+            flash("Паролата е сменена!", "success")
+            return redirect(url_for("index"))
+
+    return render_template("profile.html")

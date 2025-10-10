@@ -27,6 +27,7 @@
             <a href="{{ url_for('index') }}">Начало</a>
             <a href="{{ url_for('catalog.catalog_list') }}">Каталог</a>
             <a href="{{ url_for('cart.view_cart') }}">Количка</a>
+            <a href="{{ url_for('auth.profile') }}">Профил</a>
 
             {% if session.get('username') %}
                 <span>Здравей, {{ session.get('username') }}</span>
