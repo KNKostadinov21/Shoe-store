@@ -27,7 +27,15 @@
 <ul style="list-style: none; padding: 0;">
     {% for shoe in shoes %}
     <li style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <span><strong>{{ shoe.name }}</strong> – ${{ shoe.price }} ({{ shoe.category }})</span>
+
+  <div id="details-{{ shoe.id }}" class="hidden mt-3 border-t pt-3 text-gray-700">
+    <p><strong>Име:</strong> {{ shoe.name }}</p>
+    <p><strong>Цена:</strong> ${{ shoe.price }}</p>
+    <p><strong>Категория:</strong> {{ shoe.category }}</p>
+    <p><strong>Материал:</strong> {{ shoe.material or "Няма данни." }}</p>
+    <p><strong>Размер:</strong> {{ shoe.size or "Няма налични." }}</p>
+      <p><strong>Цвят:</strong> {{ shoe.color or "Няма данни" }}</p>
+  </div>
         <form method="post" action="{{ url_for('cart.add_to_cart', shoe_id=shoe.id) }}">
             <button type="submit">Добави в количката</button>
         </form>

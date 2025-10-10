@@ -53,11 +53,11 @@ def setup_database():
 
     if not Shoe.query.first():
         demo_shoes = [
-            SportsShoes(name="Nike", price=100),
-            SportsShoes(name="Fila", price=120),
-            SportsShoes(name="Puma", price=200),
-            OfficialShoes(name="Cafe Moda", price=150),
-            EverydayShoes(name="Easy Street", price=80)
+            SportsShoes(name="Nike", price=100, material="Изкуствена кожа", size=43, color="черни"),
+            SportsShoes(name="Fila", price=120, material="Изкуствена кожа", size=44, color="бели"),
+            SportsShoes(name="Puma", price=200, material="Изкуствена кожа", size=45, color="сиви"),
+            OfficialShoes(name="Cafe Moda", price=150, material="Естествена кожа", size=45, color="черни"),
+            EverydayShoes(name="Easy Street", price=80, material="Изкуствена кожа", size=46, color="бели"),
         ]
         db.session.add_all(demo_shoes)
         db.session.commit()

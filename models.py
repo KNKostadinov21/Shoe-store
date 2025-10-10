@@ -21,6 +21,9 @@ class Shoe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Float, nullable=False)
+    material = db.Column(db.String(100), nullable=False)
+    size = db.Column(db.Integer, nullable=False)
+    color = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(50), nullable=False)
 
     type = db.Column(db.String(50))
@@ -36,22 +39,22 @@ class Shoe(db.Model):
 class SportsShoes(Shoe):
     __mapper_args__ = {"polymorphic_identity": "sport"}
 
-    def __init__(self, name, price):
-        super().__init__(name=name, price=price, category="sport")
+    def __init__(self, name, price, material, size, color):
+        super().__init__(name=name, price=price, material=material, size=size, color=color, category="sport")
 
 
 class OfficialShoes(Shoe):
     __mapper_args__ = {"polymorphic_identity": "official"}
 
-    def __init__(self, name, price):
-        super().__init__(name=name, price=price, category="official")
+    def __init__(self, name, price, material, size, color):
+        super().__init__(name=name, price=price, material=material, size=size, color=color, category="official")
 
 
 class EverydayShoes(Shoe):
     __mapper_args__ = {"polymorphic_identity": "everyday"}
 
-    def __init__(self, name, price):
-        super().__init__(name=name, price=price, category="everyday")
+    def __init__(self, name, price, material, size, color):
+        super().__init__(name=name, price=price, material=material, size=size, color=color, category="everyday")
 
 
 class Order(db.Model):
