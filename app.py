@@ -7,14 +7,15 @@ from controllers.catalog_controller import catalog_bp
 from controllers.cart_controller import cart_bp
 from controllers.admin_controller import admin_bp
 from controllers.order_controller import order_bp
+from controllers.comment_controller import comment_bp
 import pymysql
-from models import db, User, Shoe, SportsShoes, OfficialShoes, EverydayShoes, Order
+from models import db, User, Shoe, SportsShoes, OfficialShoes, EverydayShoes, Order, Comment
 
 
 app = Flask(__name__)
 app.secret_key = "supersecret"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://flaskuser:mypassword@localhost/shoe_store"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///shoe_store.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
@@ -26,7 +27,7 @@ app.register_blueprint(catalog_bp)
 app.register_blueprint(cart_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(order_bp)
-
+app.register_blueprint(comment_bp)
 
 @app.route("/")
 def index():
