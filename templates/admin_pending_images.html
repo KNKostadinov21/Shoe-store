@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Неодобрени снимки{% endblock %}
+
+{% block content %}
+<h2>Неодобрени снимки</h2>
+<ul>
+{% for filename in images %}
+    <li>
+        <img src="{{ url_for('static', filename='uploads/' + filename) }}" width="100">
+        <a href="{{ url_for('auth.approve_image', filename=filename) }}">Одобри</a>
+        <a href="{{ url_for('auth.delete_image', filename=filename) }}">Изтрий</a>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

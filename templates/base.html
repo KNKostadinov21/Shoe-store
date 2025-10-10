@@ -33,6 +33,7 @@
                 <span>Здравей, {{ session.get('username') }}</span>
                 {% if session.get('role') == 'admin' %}
                     <a href="{{ url_for('admin.manage_shoes') }}">Админ</a>
+                    <a href="{{ url_for('auth.pending_images') }}">Неодобрени снимки</a>
                 {% endif %}
                 <a href="{{ url_for('auth.logout') }}">Излез от профила</a>
             {% else %}

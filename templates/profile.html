@@ -2,17 +2,17 @@
 {% block title %}Профил{% endblock %}
 
 {% block content %}
-    <h2>Редактирай профил</h2>
-    <form method="post">
+<h2><center>Редактирай профил</center></h2>
 
-        <label for="new_password">Нова парола</label>
-        <input type="password" name="new_password" required>
+<form method="post">
+    <label for="new_password">Нова парола</label>
+    <input type="password" name="new_password">
+    <button type="submit" name="action" value="password">Смени парола</button>
+</form>
 
-        <button type="submit">Смени парола</button>
-
-        <label for="picture">Снимка</label>
-        <input type="image" name="image" required>
-
-        <button type="submit">Смени снимка</button>
-    </form>
+<form method="post" enctype="multipart/form-data">
+    <label for="image">Качи снимка</label>
+    <input type="file" name="image" accept="image/*" required>
+    <button type="submit" name="action" value="image">Качи снимка</button>
+</form>
 {% endblock %}
