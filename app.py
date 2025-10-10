@@ -8,6 +8,7 @@ from controllers.cart_controller import cart_bp
 from controllers.admin_controller import admin_bp
 from controllers.order_controller import order_bp
 from controllers.comment_controller import comment_bp
+from controllers.pdf_controller import pdf_bp
 import pymysql
 from models import db, User, Shoe, SportsShoes, OfficialShoes, EverydayShoes, Order, Comment
 
@@ -28,6 +29,8 @@ app.register_blueprint(cart_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(order_bp)
 app.register_blueprint(comment_bp)
+
+app.register_blueprint(pdf_bp)
 
 @app.route("/")
 def index():

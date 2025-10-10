@@ -18,7 +18,9 @@
 
         <p><strong>Общо:</strong> ${{ total }}</p>
         <a href="{{ url_for('cart.view_cart') }}">
+
             <button>Продължи към плащане</button>
+        <a href="{{ url_for('pdf_bp.export_cart') }}" class="export-btn">📄 Експортирай като PDF</a>
         </a>
     {% else %}
         <p>Количката е празна.</p>
