@@ -2,16 +2,31 @@
 {% block title %}Профил{% endblock %}
 
 {% block content %}
-<h2><center>Редактирай профил</center></h2>
+    <h2 class="text-center mt-4 mb-4"><center>Моят профил</center></h2>
+
+{% if user_image %}
+<div style="text-align:center; margin-bottom: 20px;">
+    <img src="{{ url_for('static', filename=user_image) }}"
+         alt="Профилна снимка"
+         style="max-width:400px; height:auto; border:2px solid #ccc;">
+    <p style="margin-top:10px; color:#555;">Одобрена профилна снимка</p>
+</div>
+{% else %}
+<p style="text-align:center; color:#999;">Нямате одобрена снимка още.</p>
+{% endif %}
+
+<hr>
 
 <form method="post">
-    <label for="new_password">Нова парола</label>
-    <input type="password" name="new_password">
+    <label for="new_password">Нова парола</label><br>
+    <input type="password" name="new_password" required>
     <button type="submit" name="action" value="password">Смени парола</button>
 </form>
 
+<hr>
+
 <form method="post" enctype="multipart/form-data">
-    <label for="image">Качи снимка</label>
+    <label for="image">Качи нова снимка</label><br>
     <input type="file" name="image" accept="image/*" required>
     <button type="submit" name="action" value="image">Качи снимка</button>
 </form>

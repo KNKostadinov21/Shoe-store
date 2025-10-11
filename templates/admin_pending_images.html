@@ -3,13 +3,18 @@
 
 {% block content %}
 <h2>Неодобрени снимки</h2>
-<ul>
+
+<div style="display:flex; flex-wrap:wrap; gap:20px;">
 {% for filename in images %}
-    <li>
-        <img src="{{ url_for('static', filename='uploads/' + filename) }}" width="100">
-        <a href="{{ url_for('auth.approve_image', filename=filename) }}">Одобри</a>
-        <a href="{{ url_for('auth.delete_image', filename=filename) }}">Изтрий</a>
-    </li>
+  <div style="border:1px solid #ddd; padding:10px; text-align:center;">
+    <img src="{{ url_for('static', filename='uploads/pending/' + filename) }}" width="250" style="display:block; margin-bottom:10px;">
+    <div>
+        <a href="{{ url_for('auth.approve_image', filename=filename) }}" class="btn btn-success">✅ Одобри</a>
+        <a href="{{ url_for('auth.delete_image', filename=filename) }}" class="btn btn-danger">🗑️ Изтрий</a>
+    </div>
+  </div>
+{% else %}
+  <p>Няма чакащи за одобрение снимки.</p>
 {% endfor %}
-</ul>
+</div>
 {% endblock %}

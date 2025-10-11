@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from flask import request, redirect, url_for, flash, session, render_template, current_app
 from werkzeug.utils import secure_filename
 import os
+import datetime
 from services import auth_service
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -47,40 +48,54 @@ def logout():
     flash("Излязохте от профила.", "info")
     return redirect(url_for("index"))
 
-
-from flask import request, redirect, url_for, flash, session, render_template, current_app
-from werkzeug.utils import secure_filename
-import os
-from services import auth_service
-
 @auth_bp.route("/profile", methods=["GET", "POST"])
 def profile():
+    username = session.get("username")
+    if not username:
+        flash("Моля, влезте в профила си.", "warning")
+        return redirect(url_for("auth.login"))
+
+    upload_folder = os.path.join(current_app.root_path, "static/uploads")
+    pending_folder = os.path.join(upload_folder, "pending")
+    approved_folder = os.path.join(upload_folder, "approved")
+
+    os.makedirs(pending_folder, exist_ok=True)
+    os.makedirs(approved_folder, exist_ok=True)
+
+    user_image = None
+    for f in os.listdir(approved_folder):
+        if f.startswith(username + ".") or f.startswith(username + "_"):
+            user_image = f"uploads/approved/{f}"
+            break
+
     if request.method == "POST":
         action = request.form.get("action")
 
         if action == "password":
             new_password = request.form["new_password"]
             if new_password:
-                username = session["username"]
                 success = auth_service.change_password(username, new_password)
-                if success:
-                    flash("Паролата е сменена!", "success")
-                else:
-                    flash("Грешка при смяната на паролата.", "danger")
+                flash("Паролата е сменена!" if success else "Грешка при смяната на паролата.",
+                      "success" if success else "danger")
             return redirect(url_for("auth.profile"))
 
         elif action == "image":
             file = request.files.get("image")
             if file and file.filename:
-                filename = secure_filename(file.filename)
-                upload_folder = os.path.join(current_app.root_path, "static/uploads")
-                os.makedirs(upload_folder, exist_ok=True)
-                file.save(os.path.join(upload_folder, filename))
+                ext = os.path.splitext(file.filename)[1].lower()
+                filename = secure_filename(f"{username}{ext}")
+
+                for folder in [pending_folder, approved_folder]:
+                    for old in os.listdir(folder):
+                        if old.startswith(username + "."):
+                            os.remove(os.path.join(folder, old))
+
+                save_path = os.path.join(pending_folder, filename)
+                file.save(save_path)
                 flash("Снимката е качена! Админът ще я одобри.", "info")
             return redirect(url_for("auth.profile"))
 
-    return render_template("profile.html")
-
+    return render_template("profile.html", user_image=user_image)
 
 
 @auth_bp.route("/admin/pending_images")
@@ -89,11 +104,10 @@ def pending_images():
         flash("Нямате достъп до тази страница.", "danger")
         return redirect(url_for("index"))
 
-    upload_folder = os.path.join(current_app.root_path, "static/uploads")
+    upload_folder = os.path.join(current_app.root_path, "static/uploads/pending")
     os.makedirs(upload_folder, exist_ok=True)
     images = os.listdir(upload_folder)
     return render_template("admin_pending_images.html", images=images)
-
 
 
 @auth_bp.route("/approve_image/<filename>")
@@ -103,14 +117,27 @@ def approve_image(filename):
         return redirect(url_for("index"))
 
     upload_folder = os.path.join(current_app.root_path, "static/uploads")
-    old_path = os.path.join(upload_folder, filename)
+    pending_folder = os.path.join(upload_folder, "pending")
     approved_folder = os.path.join(upload_folder, "approved")
+
+    os.makedirs(pending_folder, exist_ok=True)
     os.makedirs(approved_folder, exist_ok=True)
+
+    old_path = os.path.join(pending_folder, filename)
     new_path = os.path.join(approved_folder, filename)
+
     if os.path.exists(old_path):
+        username = os.path.splitext(filename)[0]
+        for f in os.listdir(approved_folder):
+            if f.startswith(username + "."):
+                os.remove(os.path.join(approved_folder, f))
         os.rename(old_path, new_path)
         flash("Снимката е одобрена!", "success")
+    else:
+        flash("Снимката не беше намерена.", "danger")
+
     return redirect(url_for("auth.pending_images"))
+
 
 @auth_bp.route("/delete_image/<filename>")
 def delete_image(filename):
@@ -118,9 +145,11 @@ def delete_image(filename):
         flash("Нямате права да триете снимки.", "danger")
         return redirect(url_for("index"))
 
-    upload_folder = os.path.join(current_app.root_path, "static/uploads")
-    path = os.path.join(upload_folder, filename)
+    path = os.path.join(current_app.root_path, "static/uploads/pending", filename)
     if os.path.exists(path):
         os.remove(path)
         flash("Снимката е изтрита.", "success")
+    else:
+        flash("Файлът не съществува.", "danger")
+
     return redirect(url_for("auth.pending_images"))
