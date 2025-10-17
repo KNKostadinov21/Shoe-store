@@ -16,6 +16,7 @@ def login():
         success, message, user = auth_service.login(username, password)
         if success:
             session["username"] = user.username
+            session["user_id"] = user.id
             session["role"] = user.role
             flash(message, "success")
             return redirect(url_for("index"))
@@ -43,6 +44,7 @@ def register():
 @auth_bp.route("/logout")
 def logout():
     session.pop("username", None)
+    session.pop("user_id", None)
     session.pop("role", None)
     session.pop("cart", None)
     flash("Излязохте от профила.", "info")

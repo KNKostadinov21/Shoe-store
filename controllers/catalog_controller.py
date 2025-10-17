@@ -1,5 +1,10 @@
 from flask import Blueprint, render_template, request
 import services.catalog_service as catalog_service
+from flask import session, flash, redirect, url_for
+import services.comment_service as comment_service
+from models import db, Shoe, Comment, User
+import datetime
+
 
 catalog_bp = Blueprint('catalog', __name__, url_prefix='/catalog')
 
@@ -31,3 +36,33 @@ def catalog_list():
         min_price=min_price,
         max_price=max_price
     )
+
+@catalog_bp.route("/<int:shoe_id>", methods=["GET", "POST"])
+def shoe_details(shoe_id):
+    shoe = Shoe.query.get_or_404(shoe_id)
+
+    if request.method == "POST":
+        if "username" not in session:
+            flash("Трябва да сте влезли, за да коментирате.", "danger")
+            return redirect(url_for("auth.login"))
+
+        message = request.form.get("comment")
+        parent_id = request.form.get("parent_id")  # ако е отговор
+        username = session["username"]
+        user = User.query.filter_by(username=username).first()
+
+        comment = Comment(
+            comment=message,
+            user_id=user.id,
+            shoe_id=shoe.id,
+            parent_id=parent_id if parent_id else None
+        )
+
+        db.session.add(comment)
+        db.session.commit()
+        flash("Коментарът е добавен успешно!", "success")
+        return redirect(url_for("catalog.shoe_details", shoe_id=shoe_id))
+
+    comments = Comment.query.filter_by(shoe_id=shoe_id, parent_id=None).all()
+
+    return render_template("shoe_details.html", shoe=shoe, comments=comments)

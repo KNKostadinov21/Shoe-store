@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ shoe.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mt-4">{{ shoe.name }}</h2>
+
+    <div class="text-center">
+        {% if shoe.image %}
+            <img src="{{ url_for('static', filename='shoes/' + shoe.image) }}" alt="{{ shoe.name }}" style="width: 300px; margin-top: 20px;">
+        {% endif %}
+    </div>
+
+    <div class="shoe-info" style="margin-top: 20px;">
+        <p><strong>Цена:</strong> {{ shoe.price }} лв.</p>
+        <p><strong>Материал:</strong> {{ shoe.material }}</p>
+        <p><strong>Размер:</strong> {{ shoe.size }}</p>
+        <p><strong>Цвят:</strong> {{ shoe.color }}</p>
+        <p><strong>Категория:</strong> {{ shoe.category }}</p>
+        {% if shoe.type %}
+            <p><strong>Тип:</strong> {{ shoe.type }}</p>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <h3>Коментари</h3>
+
+    <form method="POST" style="margin-top: 10px; margin-bottom: 30px;">
+        <textarea name="comment" placeholder="Вашият коментар..." rows="3" style="width: 100%; padding: 10px;" required></textarea><br>
+        <button type="submit" class="btn btn-primary mt-2">Добави коментар</button>
+    </form>
+
+    <div>
+        {% if comments %}
+            {% for comment in comments %}
+                {% include "partials/comment_thread.html" with context %}
+            {% endfor %}
+        {% else %}
+            <p>Все още няма коментари.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+<div style="margin-left: {{ 30 if comment.parent_id else 0 }}px; border-left: {% if comment.parent_id %}2px solid #ccc{% endif %}; padding-left: 10px; margin-top: 15px;">
+
+    <p>
+        <strong>{{ comment.user.username if comment.user else "Анонимен" }}</strong>: {{ comment.comment }}
+    </p>
+
+    {% for reply in comment.replies %}
+        {% include "partials/comment_thread.html" with context %}
+    {% endfor %}
+</div>

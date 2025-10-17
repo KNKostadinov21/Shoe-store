@@ -73,6 +73,12 @@ class Comment(db.Model):
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.String(500), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    shoe_id = db.Column(db.Integer, db.ForeignKey("shoes.id"), nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey("comments.id"), nullable=True)
+
+    user = db.relationship("User", backref="comments", lazy=True)
+    replies = db.relationship("Comment", backref=db.backref("parent", remote_side=[id]), lazy=True)
 
     def __repr__(self):
-        return f"<Comment: {self.comment}>"
+        return f"<Comment {self.id} от {self.user_id}>"

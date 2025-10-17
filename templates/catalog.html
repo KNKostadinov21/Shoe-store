@@ -39,7 +39,9 @@
         <form method="post" action="{{ url_for('cart.add_to_cart', shoe_id=shoe.id) }}">
             <button type="submit">Добави в количката</button>
         </form>
-    <a href="{{ url_for('comment.add_comment') }}"><button>Добави коментар</button></a>
+    <a href="{{ url_for('catalog.shoe_details', shoe_id=shoe.id) }}">
+    <button>Виж детайли и коментари</button>
+    </a>
     {% endfor %}
 </ul>
 
