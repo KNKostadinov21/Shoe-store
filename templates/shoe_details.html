@@ -24,6 +24,23 @@
 
     <hr>
 
+    <!-- 🗓️ Календар за избор на начална дата -->
+    <div style="margin-top: 20px; margin-bottom: 30px;">
+        <form method="GET" action="{{ url_for('catalog.shoe_details', shoe_id=shoe.id) }}">
+            <label for="from_date"><strong>Избери начална дата:</strong></label>
+            <input type="date" id="from_date" name="from_date" value="{{ from_date or '' }}">
+            <button type="submit" class="btn btn-info btn-sm">Покажи статистика</button>
+        </form>
+
+        {% if total_adds is not none %}
+            <div style="margin-top: 10px;">
+                <strong>Обувката е добавена в количката {{ total_adds }} пъти от {{ from_date }} до днес.</strong>
+            </div>
+        {% endif %}
+    </div>
+
+    <hr>
+
     <h3>Коментари</h3>
 
     <form method="POST" style="margin-top: 10px; margin-bottom: 30px;">
